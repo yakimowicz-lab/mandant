@@ -310,89 +310,6 @@
     font-size:14.5px;
   }
 
-  /* ---------- Recap table ---------- */
-  details.recap{
-    margin-top:44px;
-    border-top:1px solid var(--line);
-    padding-top:26px;
-  }
-  details.recap summary{
-    cursor:pointer;
-    list-style:none;
-    display:flex;
-    align-items:center;
-    gap:8px;
-    font-family:'Fraunces', Georgia, serif;
-    font-weight:600;
-    font-size:18px;
-    color:var(--ink-900);
-  }
-  details.recap summary::-webkit-details-marker{display:none;}
-  details.recap summary .chev{
-    transition:transform .15s ease;
-    color:var(--green-600);
-    flex-shrink:0;
-  }
-  details.recap[open] summary .chev{transform:rotate(90deg);}
-  details.recap summary .hint{
-    font-family:'Public Sans', sans-serif;
-    font-weight:500;
-    font-size:13px;
-    color:var(--ink-400);
-    margin-left:auto;
-  }
-  .recap-actions{
-    display:flex;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:12px;
-    margin-bottom:16px;
-  }
-  .dl-btn{
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    background:var(--green-050);
-    border:1.5px solid var(--green-600);
-    color:var(--green-700);
-    font-family:inherit;
-    font-weight:600;
-    font-size:13.5px;
-    padding:9px 15px;
-    border-radius:999px;
-    cursor:pointer;
-    transition:background .15s ease;
-  }
-  .dl-btn:hover{background:#DAF0E3;}
-  .dl-btn:focus-visible{outline:2.5px solid var(--green-600); outline-offset:2px;}
-  .dl-btn:disabled{opacity:.55; cursor:default;}
-  .dl-status{font-size:12.5px; color:var(--ink-400);}
-  .recap-body{margin-top:18px; overflow-x:auto;}
-  table.recap-table{
-    width:100%;
-    border-collapse:collapse;
-    font-size:13.5px;
-    min-width:640px;
-  }
-  table.recap-table th{
-    text-align:left;
-    font-size:11.5px;
-    font-weight:700;
-    letter-spacing:0.05em;
-    text-transform:uppercase;
-    color:var(--ink-400);
-    padding:0 12px 10px 0;
-    border-bottom:1.5px solid var(--ink-900);
-  }
-  table.recap-table td{
-    padding:12px 12px 12px 0;
-    border-bottom:1px solid var(--line);
-    color:var(--ink-700);
-    vertical-align:top;
-  }
-  table.recap-table tr:last-child td{border-bottom:none;}
-  table.recap-table td.situation{font-weight:600; color:var(--ink-900); white-space:nowrap;}
-
   footer.note{
     margin-top:40px;
     font-size:12.5px;
@@ -434,26 +351,6 @@
     </div>
   </div>
 
-  <details class="recap">
-    <summary>
-      <svg class="chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Fiche récap — tous les cas
-      <span class="hint">à garder sous la main</span>
-    </summary>
-    <div class="recap-body">
-      <div class="recap-actions">
-        <button type="button" class="dl-btn" id="download-recap-btn" hidden></button>
-        <span class="dl-status" id="dl-status" aria-live="polite"></span>
-      </div>
-      <table class="recap-table">
-        <thead>
-          <tr><th>Situation</th><th>Qui signe</th><th>Base légale</th></tr>
-        </thead>
-        <tbody id="recap-tbody"></tbody>
-      </table>
-    </div>
-  </details>
-
   <footer class="note">Outil pédagogique à usage interne. Il donne le principe général et le réflexe à avoir — en cas de montage particulier (contrat de mariage, clause statutaire, procuration, indivisaire mineur…), le notaire reste la référence finale.</footer>
 
 </div>
@@ -471,8 +368,7 @@
     building: `<svg width="26" height="26" viewBox="0 0 26 26" fill="none"><rect x="6" y="4.5" width="14" height="17" rx="1.2" stroke="currentColor" stroke-width="1.7"/><path d="M9.3 8.3h1.6M15.1 8.3h1.6M9.3 12.4h1.6M15.1 12.4h1.6M9.3 16.5h1.6M15.1 16.5h1.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M10.5 21.5v-3.2h5v3.2" stroke="currentColor" stroke-width="1.6"/></svg>`,
     shield: `<svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 4l7.5 2.8v6c0 5.1-3.2 8.4-7.5 10-4.3-1.6-7.5-4.9-7.5-10v-6L13 4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>`,
     shieldSplit: `<svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 4l7.5 2.8v6c0 5.1-3.2 8.4-7.5 10-4.3-1.6-7.5-4.9-7.5-10v-6L13 4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M13 4.4v18.2" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2.6 2.6"/></svg>`,
-    check: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.3l3 3 6-6.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-    download: `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 2v7.7M8 9.7L5.2 6.9M8 9.7l2.8-2.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12.6h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`
+    check: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.3l3 3 6-6.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`
   };
 
   // ---------- Data model ----------
@@ -731,74 +627,6 @@
   }
 
   renderResult();
-
-  // ---------- Recap table ----------
-  const recapRows = [
-    ['Propriétaire seul','Le/la propriétaire seul(e)','Titre de propriété'],
-    ['Mariés — bien commun','Les deux époux','Art. 1424 C. civ.'],
-    ['Mariés — bien propre, résidence principale','Les deux époux','Art. 215 al.3 C. civ.'],
-    ['Mariés — bien propre, autre logement','Le conjoint propriétaire','—'],
-    ['Pacsés — bien indivis','Les deux partenaires','Convention de PACS'],
-    ['Pacsés — bien propre','Le partenaire propriétaire','Séparation de biens (défaut)'],
-    ['Union libre — achat à deux','Les deux concubins','Acte de propriété'],
-    ['Union libre — un seul propriétaire','Le/la propriétaire seul(e)','Titre de propriété'],
-    ['Indivision / succession','Tous les indivisaires*','Art. 815-3 C. civ.'],
-    ['SCI','Le/la gérant(e)*','Statuts de la SCI'],
-    ['Tutelle','Le tuteur*','Art. 505 C. civ.'],
-    ['Curatelle','La personne protégée + le curateur','Art. 467 C. civ.'],
-  ];
-  const tbody = document.getElementById('recap-tbody');
-  recapRows.forEach(row=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td class="situation">${row[0]}</td><td>${row[1]}</td><td><span class="law-tag">${row[2]}</span></td>`;
-    tbody.appendChild(tr);
-  });
-
-  // ---------- Recap download (CSV) ----------
-  function recapToCSV(rows){
-    const header = ['Situation','Qui signe','Base légale'];
-    const esc = v=>{
-      const s = String(v).replace(/"/g,'""');
-      return /[";\n]/.test(s) ? `"${s}"` : s;
-    };
-    const lines = [header, ...rows].map(r=>r.map(esc).join(';'));
-    return '﻿' + lines.join('\r\n');
-  }
-
-  (async function initDownload(){
-    const btn = document.getElementById('download-recap-btn');
-    const status = document.getElementById('dl-status');
-    if(!window.claude || typeof window.claude.use !== 'function') return;
-    let downloads = null;
-    try{ downloads = await window.claude.use('downloads'); }catch(e){ downloads = null; }
-    if(!downloads) return;
-
-    btn.innerHTML = ICON.download + '<span>Télécharger la fiche (CSV)</span>';
-    btn.hidden = false;
-
-    btn.addEventListener('click', async ()=>{
-      btn.disabled = true;
-      status.textContent = '';
-      try{
-        await downloads.save({
-          filename:'fiche-recap-signataires-mandat.csv',
-          data: recapToCSV(recapRows)
-        });
-        status.textContent = 'Fiche téléchargée.';
-      }catch(err){
-        const code = err && err.code;
-        if(code === 'declined'){
-          status.textContent = '';
-        } else if(code === 'rate_limited'){
-          status.textContent = 'Une demande est déjà en cours — réessayez dans un instant.';
-        } else {
-          status.textContent = 'Téléchargement indisponible ici.';
-        }
-      } finally {
-        btn.disabled = false;
-      }
-    });
-  })();
 
 })();
 </script>
