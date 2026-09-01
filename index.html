@@ -1,0 +1,804 @@
+<title>Qui Signe ?</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+  :root{
+    --paper:#FFFFFF;
+    --paper-alt:#F7F3F1;
+    --paper-alt-2:#F1ECE9;
+    --ink-900:#221E1B;
+    --ink-700:#3E3733;
+    --ink-600:#5C534D;
+    --ink-400:#8B8078;
+    --ink-300:#CFC5BE;
+    --line:#E6DFDA;
+    --green-600:#0C8A50;
+    --green-700:#066238;
+    --green-050:#E6F6ED;
+    --warn-600:#E1032C;
+    --warn-700:#A6021F;
+    --warn-050:#FCEAEC;
+    --gold-600:#AD7717;
+    --gold-050:#FBF0DD;
+    --blue-700:#1F5FA8;
+    --blue-050:#EAF2FB;
+    --blue-border:#CFE0F4;
+    --radius-s:6px;
+    --radius-m:10px;
+    --radius-l:16px;
+    --shadow-card:0 1px 2px rgba(34,30,27,0.06), 0 8px 24px -12px rgba(34,30,27,0.16);
+  }
+
+  *{box-sizing:border-box;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  body{
+    background:var(--paper);
+    color:var(--ink-900);
+    font-family:'Public Sans', system-ui, sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .page{
+    max-width:880px;
+    margin:0 auto;
+    padding:0 20px 96px;
+  }
+
+  /* ---------- Header ---------- */
+  header.hero{
+    padding:40px 0 28px;
+    border-bottom:3px solid var(--green-600);
+    margin-bottom:36px;
+  }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    color:var(--green-600);
+    background:var(--green-050);
+    padding:5px 10px;
+    border-radius:999px;
+    margin-bottom:16px;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--green-600);}
+  h1{
+    font-family:'Fraunces', Georgia, serif;
+    font-optical-sizing:auto;
+    font-weight:600;
+    font-size:clamp(32px,5.5vw,46px);
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    margin:0 0 12px;
+    text-wrap:balance;
+    color:var(--ink-900);
+  }
+  .hero p{
+    font-size:16px;
+    color:var(--ink-600);
+    max-width:56ch;
+    margin:0;
+  }
+
+  /* ---------- Step scaffolding ---------- */
+  .step{
+    margin-bottom:34px;
+  }
+  .step-head{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .step-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-400);
+    letter-spacing:0.06em;
+  }
+  .step-title{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:600;
+    font-size:20px;
+    color:var(--ink-900);
+  }
+  .result-title{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:700;
+    font-size:20px;
+    color:var(--ink-900);
+  }
+  .result-subtitle{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:700;
+    font-size:20px;
+    color:var(--ink-900);
+  }
+
+  /* ---------- Situation grid (step 1) ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(190px,1fr));
+    gap:10px;
+  }
+  .sit-card{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+    text-align:left;
+    padding:16px 14px;
+    background:var(--paper-alt);
+    border:1.5px solid var(--line);
+    border-radius:var(--radius-m);
+    cursor:pointer;
+    font-family:inherit;
+    color:var(--ink-900);
+    transition:border-color .15s ease, background .15s ease, transform .1s ease;
+  }
+  .sit-card:hover{border-color:var(--ink-300); background:var(--paper-alt-2);}
+  .sit-card:active{transform:scale(0.99);}
+  .sit-card:focus-visible{outline:2.5px solid var(--green-600); outline-offset:2px;}
+  .sit-card.selected{
+    border-color:var(--green-600);
+    background:var(--green-050);
+  }
+  .sit-card svg{flex-shrink:0;}
+  .sit-card .label{
+    font-weight:600;
+    font-size:14.5px;
+    line-height:1.3;
+  }
+  .sit-card .sub{
+    font-size:12.5px;
+    color:var(--ink-600);
+  }
+
+  /* ---------- Sub-questions (step 2) ---------- */
+  .subq{
+    background:var(--paper-alt);
+    border:1.5px solid var(--line);
+    border-radius:var(--radius-m);
+    padding:18px 18px 20px;
+    margin-bottom:14px;
+  }
+  .subq .q{
+    font-weight:600;
+    font-size:14.5px;
+    margin-bottom:12px;
+    color:var(--ink-900);
+  }
+  .pills{display:flex; flex-wrap:wrap; gap:8px;}
+  .pill{
+    font-family:inherit;
+    font-size:13.5px;
+    font-weight:600;
+    padding:9px 16px;
+    border-radius:999px;
+    border:1.5px solid var(--ink-300);
+    background:var(--paper);
+    color:var(--ink-700);
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease, color .15s ease;
+  }
+  .pill:hover{border-color:var(--ink-600);}
+  .pill:focus-visible{outline:2.5px solid var(--green-600); outline-offset:2px;}
+  .pill.selected{
+    background:var(--green-600);
+    border-color:var(--green-600);
+    color:#fff;
+  }
+
+  /* ---------- Result ---------- */
+  #result-wrap{ min-height:0; }
+  .result{
+    border:1.5px solid var(--line);
+    border-left:5px solid var(--green-600);
+    border-radius:var(--radius-l);
+    background:var(--paper);
+    box-shadow:var(--shadow-card);
+    padding:26px 26px 24px;
+    animation:rise .28s ease both;
+  }
+  @keyframes rise{
+    from{opacity:0; transform:translateY(8px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .result-kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    font-weight:600;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--green-600);
+    margin-bottom:6px;
+  }
+  .result h2{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:600;
+    font-size:23px;
+    margin:0 0 16px;
+    text-wrap:balance;
+    color:var(--ink-900);
+  }
+  .signers{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .signer-chip{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--blue-050);
+    color:var(--blue-700);
+    border:1px solid var(--blue-border);
+    border-radius:999px;
+    padding:8px 14px 8px 10px;
+    font-weight:600;
+    font-size:14px;
+  }
+  .signer-chip svg{flex-shrink:0;}
+  .block{
+    padding:14px 0;
+    border-top:1px solid var(--line);
+  }
+  .block:first-of-type{border-top:none; padding-top:0;}
+  .block .label{
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-400);
+    margin-bottom:6px;
+  }
+  .block p{margin:0; font-size:14.5px; color:var(--ink-700);}
+  .law-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    font-weight:600;
+    background:var(--paper-alt-2);
+    color:var(--ink-700);
+    border-radius:5px;
+    padding:2px 6px;
+    white-space:nowrap;
+  }
+  .callout{
+    border-radius:var(--radius-m);
+    padding:13px 15px;
+    font-size:14px;
+    margin-top:4px;
+  }
+  .callout.tip{background:var(--gold-050); color:#7A560F;}
+  .callout.warn{background:var(--warn-050); color:var(--warn-700);}
+  .callout .callout-label{font-weight:700; margin-right:4px;}
+
+  .reset-btn{
+    margin-top:18px;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:none;
+    border:1.5px solid var(--ink-300);
+    color:var(--ink-700);
+    font-family:inherit;
+    font-weight:600;
+    font-size:13.5px;
+    padding:9px 15px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .reset-btn:hover{border-color:var(--ink-600); color:var(--ink-900);}
+  .reset-btn:focus-visible{outline:2.5px solid var(--green-600); outline-offset:2px;}
+
+  .placeholder{
+    border:1.5px dashed var(--line);
+    border-radius:var(--radius-l);
+    padding:30px 26px;
+    color:var(--ink-400);
+    font-size:14.5px;
+  }
+
+  /* ---------- Recap table ---------- */
+  details.recap{
+    margin-top:44px;
+    border-top:1px solid var(--line);
+    padding-top:26px;
+  }
+  details.recap summary{
+    cursor:pointer;
+    list-style:none;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:600;
+    font-size:18px;
+    color:var(--ink-900);
+  }
+  details.recap summary::-webkit-details-marker{display:none;}
+  details.recap summary .chev{
+    transition:transform .15s ease;
+    color:var(--green-600);
+    flex-shrink:0;
+  }
+  details.recap[open] summary .chev{transform:rotate(90deg);}
+  details.recap summary .hint{
+    font-family:'Public Sans', sans-serif;
+    font-weight:500;
+    font-size:13px;
+    color:var(--ink-400);
+    margin-left:auto;
+  }
+  .recap-actions{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-bottom:16px;
+  }
+  .dl-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    background:var(--green-050);
+    border:1.5px solid var(--green-600);
+    color:var(--green-700);
+    font-family:inherit;
+    font-weight:600;
+    font-size:13.5px;
+    padding:9px 15px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:background .15s ease;
+  }
+  .dl-btn:hover{background:#DAF0E3;}
+  .dl-btn:focus-visible{outline:2.5px solid var(--green-600); outline-offset:2px;}
+  .dl-btn:disabled{opacity:.55; cursor:default;}
+  .dl-status{font-size:12.5px; color:var(--ink-400);}
+  .recap-body{margin-top:18px; overflow-x:auto;}
+  table.recap-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+    min-width:640px;
+  }
+  table.recap-table th{
+    text-align:left;
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--ink-400);
+    padding:0 12px 10px 0;
+    border-bottom:1.5px solid var(--ink-900);
+  }
+  table.recap-table td{
+    padding:12px 12px 12px 0;
+    border-bottom:1px solid var(--line);
+    color:var(--ink-700);
+    vertical-align:top;
+  }
+  table.recap-table tr:last-child td{border-bottom:none;}
+  table.recap-table td.situation{font-weight:600; color:var(--ink-900); white-space:nowrap;}
+
+  footer.note{
+    margin-top:40px;
+    font-size:12.5px;
+    color:var(--ink-400);
+    border-top:1px solid var(--line);
+    padding-top:18px;
+  }
+</style>
+
+<div class="page">
+
+  <header class="hero">
+    <span class="eyebrow"><span class="dot"></span>efficity · outil pratique</span>
+    <h1>Qui doit signer le mandat&nbsp;?</h1>
+  </header>
+
+  <div class="step">
+    <div class="step-head">
+      <span class="step-title">Choisir une situation et répondre aux éventuelles questions complémentaires.</span>
+    </div>
+    <div class="grid" id="situation-grid" role="group" aria-label="Choix de la situation"></div>
+  </div>
+
+  <div class="step" id="subq-step" hidden>
+    <div class="step-head">
+      <span class="step-num">Étape 2</span>
+      <span class="step-title">Quelques précisions</span>
+    </div>
+    <div id="subq-container"></div>
+  </div>
+
+  <div class="step">
+    <div class="step-head">
+      <span class="result-title">Résultat</span>
+      <span class="result-subtitle">: Les signataires</span>
+    </div>
+    <div id="result-wrap">
+      <div class="placeholder">Choisir une situation ci-dessus pour voir qui doit signer.</div>
+    </div>
+  </div>
+
+  <details class="recap">
+    <summary>
+      <svg class="chev" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Fiche récap — tous les cas
+      <span class="hint">à garder sous la main</span>
+    </summary>
+    <div class="recap-body">
+      <div class="recap-actions">
+        <button type="button" class="dl-btn" id="download-recap-btn" hidden></button>
+        <span class="dl-status" id="dl-status" aria-live="polite"></span>
+      </div>
+      <table class="recap-table">
+        <thead>
+          <tr><th>Situation</th><th>Qui signe</th><th>Base légale</th></tr>
+        </thead>
+        <tbody id="recap-tbody"></tbody>
+      </table>
+    </div>
+  </details>
+
+  <footer class="note">Outil pédagogique à usage interne. Il donne le principe général et le réflexe à avoir — en cas de montage particulier (contrat de mariage, clause statutaire, procuration, indivisaire mineur…), le notaire reste la référence finale.</footer>
+
+</div>
+
+<script>
+(function(){
+
+  // ---------- Icons (stroke-based, minimal) ----------
+  const ICON = {
+    person: `<svg width="26" height="26" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="8.5" r="3.6" stroke="currentColor" stroke-width="1.7"/><path d="M5.5 21c1.4-3.8 4.3-5.7 7.5-5.7s6.1 1.9 7.5 5.7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>`,
+    rings: `<svg width="26" height="26" viewBox="0 0 26 26" fill="none"><circle cx="10" cy="15" r="5.4" stroke="currentColor" stroke-width="1.7"/><circle cx="16.5" cy="15" r="5.4" stroke="currentColor" stroke-width="1.7"/><path d="M13.2 6.6l-2.4 3.6M13.2 6.6l2.4 3.6M13.2 6.6V4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+    link: `<svg width="26" height="26" viewBox="0 0 26 26" fill="none"><rect x="4" y="9" width="9" height="8" rx="4" transform="rotate(-25 4 9)" stroke="currentColor" stroke-width="1.7"/><rect x="12" y="9" width="9" height="8" rx="4" transform="rotate(-25 12 9)" stroke="currentColor" stroke-width="1.7"/></svg>`,
+    heart: `<svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 20.5S4.5 15.3 4.5 9.7C4.5 6.8 6.8 4.6 9.5 4.6c1.6 0 3 .8 3.5 2 0-.1 0-.1 0 0 .5-1.2 1.9-2 3.5-2 2.7 0 5 2.2 5 5.1 0 5.6-8.5 10.8-8.5 10.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>`,
+    family: `<svg width="26" height="26" viewBox="0 0 26 26" fill="none"><circle cx="8" cy="8.5" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="8.5" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="13" cy="9.5" r="2.3" stroke="currentColor" stroke-width="1.5"/><path d="M2.6 21c1-3 3-4.6 5.4-4.6s4.4 1.6 5.4 4.6M12.6 21c.9-2.7 2.8-4.2 5-4.2s4.1 1.5 5 4.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
+    building: `<svg width="26" height="26" viewBox="0 0 26 26" fill="none"><rect x="6" y="4.5" width="14" height="17" rx="1.2" stroke="currentColor" stroke-width="1.7"/><path d="M9.3 8.3h1.6M15.1 8.3h1.6M9.3 12.4h1.6M15.1 12.4h1.6M9.3 16.5h1.6M15.1 16.5h1.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M10.5 21.5v-3.2h5v3.2" stroke="currentColor" stroke-width="1.6"/></svg>`,
+    shield: `<svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 4l7.5 2.8v6c0 5.1-3.2 8.4-7.5 10-4.3-1.6-7.5-4.9-7.5-10v-6L13 4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>`,
+    shieldSplit: `<svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 4l7.5 2.8v6c0 5.1-3.2 8.4-7.5 10-4.3-1.6-7.5-4.9-7.5-10v-6L13 4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M13 4.4v18.2" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2.6 2.6"/></svg>`,
+    check: `<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.3l3 3 6-6.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    download: `<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 2v7.7M8 9.7L5.2 6.9M8 9.7l2.8-2.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 12.6h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`
+  };
+
+  // ---------- Data model ----------
+  const SITUATIONS = [
+    {
+      id:'seul', icon:'person', label:'Propriétaire seul', sub:'Aucun autre titulaire',
+      result:{
+        signers:['Le / la propriétaire'],
+        law:'Titre de propriété',
+        text:'La personne inscrite comme propriétaire au titre de propriété signe seule le mandat. Vérifiez simplement sa pièce d\'identité et la concordance avec le titre.',
+        tip:'Demandez toujours le dernier acte de propriété avant le rendez-vous, pas seulement l\'avis de taxe foncière — les noms peuvent différer après un divorce ou une succession non actée.'
+      }
+    },
+    {
+      id:'marie', icon:'rings', label:'Couple marié', sub:'Cliquez pour préciser',
+      questions:[
+        { key:'proprio', q:'Le bien appartient-il aux deux époux ou à un seul ?', options:[
+          {v:'deux', l:'Aux deux'}, {v:'un', l:'À un seul des époux'}
+        ]},
+        { key:'residence', q:'S\'il appartient à un seul : est-ce la résidence principale du couple ?', options:[
+          {v:'oui', l:'Oui, ils y vivent'}, {v:'non', l:'Non, autre bien (locatif, secondaire…)'}
+        ], showIf:{proprio:'un'} }
+      ],
+      resolve(a){
+        if(a.proprio==='deux'){
+          return {
+            signers:['Monsieur','Madame'],
+            law:'Art. 1424 C. civ.',
+            text:'Bien commun (acquis pendant le mariage, régime légal ou communautaire) : la vente est un acte de disposition qui exige l\'accord des deux époux. Les deux signent le mandat.',
+            tip:'C\'est le cas le plus fréquent — pensez à vérifier le régime matrimonial (contrat de mariage) si le bien a été financé de façon très inégale.'
+          };
+        }
+        if(a.proprio==='un' && a.residence==='oui'){
+          return {
+            signers:['Le conjoint propriétaire','Le conjoint non-propriétaire'],
+            law:'Art. 215 al.3 C. civ.',
+            text:'Même si le bien est propre à un seul époux (acheté avant le mariage, reçu par donation ou succession), c\'est le logement de la famille : l\'autre époux doit aussi signer, sinon l\'acte est annulable.',
+            tip:'Un agent qui ne fait signer que le propriétaire "sur le titre" peut voir le mandat — et la vente — contestés. Le réflexe résidence principale doit devenir automatique.',
+            warn:true
+          };
+        }
+        if(a.proprio==='un' && a.residence==='non'){
+          return {
+            signers:['Le conjoint propriétaire'],
+            law:'Bien propre — hors art. 215',
+            text:'Bien propre à un seul époux et qui n\'est pas le logement familial (locatif, secondaire, reçu en héritage…) : lui seul signe le mandat.',
+            tip:'Demandez quand même si le conjoint est mentionné à l\'acte notarié — parfois un bien "propre" cache une indivision partielle.'
+          };
+        }
+        return null;
+      }
+    },
+    {
+      id:'pacse', icon:'link', label:'Couple pacsé', sub:'Cliquez pour préciser',
+      questions:[
+        { key:'proprio', q:'Le bien appartient-il aux deux partenaires ou à un seul ?', options:[
+          {v:'deux', l:'Aux deux (indivision)'}, {v:'un', l:'À un seul des partenaires'}
+        ]}
+      ],
+      resolve(a){
+        if(a.proprio==='deux'){
+          return {
+            signers:['Partenaire 1','Partenaire 2'],
+            law:'Indivision entre partenaires',
+            text:'Bien acquis à deux (ou PACS sous régime d\'indivision) : les deux partenaires sont copropriétaires, chacun pour sa quote-part. Les deux signent le mandat.',
+            tip:'Vérifiez la quote-part de chacun sur l\'acte d\'achat — elle sera reprise dans le mandat et à la vente.'
+          };
+        }
+        if(a.proprio==='un'){
+          return {
+            signers:['Le partenaire propriétaire'],
+            law:'Séparation de biens (régime légal du PACS)',
+            text:'Par défaut, le PACS place chaque partenaire en séparation de biens : le bien propre à l\'un d\'eux reste le sien, même si l\'autre y vit. Contrairement au mariage, il n\'y a pas de protection légale automatique du logement.',
+            tip:'Demandez toujours la convention de PACS — un régime d\'indivision choisi, ou une clause spécifique sur le logement, change la donne.',
+            warn:true
+          };
+        }
+        return null;
+      }
+    },
+    {
+      id:'concubinage', icon:'heart', label:'Couple union libre', sub:'Ni marié ni pacsé — cliquez pour préciser',
+      questions:[
+        { key:'proprio', q:'Le bien a-t-il été acheté par les deux ou par un seul ?', options:[
+          {v:'deux', l:'Par les deux (indivision)'}, {v:'un', l:'Par un seul'}
+        ]}
+      ],
+      resolve(a){
+        if(a.proprio==='deux'){
+          return {
+            signers:['Personne 1','Personne 2'],
+            law:'Indivision (acte d\'achat)',
+            text:'Achat en commun sans mariage ni PACS : les deux concubins sont indivisaires selon les quote-parts inscrites à l\'acte. Les deux signent le mandat.',
+            tip:'Vérifiez que les quote-parts indiquées correspondent bien au financement réel de chacun — c\'est une source fréquente de tension à la vente.'
+          };
+        }
+        if(a.proprio==='un'){
+          return {
+            signers:['Le / la propriétaire'],
+            law:'Titre de propriété — aucune protection du logement',
+            text:'La loi n\'accorde aucune protection du "logement familial" en union libre. Le propriétaire seul au titre signe le mandat, même si son conjoint vit dans les lieux depuis des années.',
+            tip:'C\'est le cas typique "le bien est à Madame, Monsieur vit avec elle, ils ne sont ni mariés ni pacsés" — seule Madame signe. Confirmez oralement que le conjoint est informé, pour éviter les mauvaises surprises en cours de mandat.',
+            warn:true
+          };
+        }
+        return null;
+      }
+    },
+    {
+      id:'indivision', icon:'family', label:'Indivision / succession', sub:'Achat à plusieurs, héritage',
+      result:{
+        signers:['Tous les indivisaires'],
+        multiple:true,
+        law:'Art. 815-3 C. civ.',
+        text:'Vendre un bien indivis est un acte de disposition : en principe, tous les indivisaires doivent signer le mandat, chacun pour sa quote-part (frères et sœurs, héritiers, associés d\'achat…). En cas de démembrement de propriété (usufruit / nue-propriété), la règle est la même pour chaque camp : tous les usufruitiers et tous les nu-propriétaires doivent signer, car chacun a un droit distinct sur le bien.',
+        tip:'Un ou des indivisaires réunissant 2/3 des droits peuvent, pour payer les dettes de l\'indivision, mandater la vente après notification formelle aux autres — procédure spécifique, à faire valider par le notaire. Un indivisaire absent peut aussi donner procuration.',
+        warn:true
+      }
+    },
+    {
+      id:'sci', icon:'building', label:'SCI', sub:'Société civile immobilière',
+      result:{
+        signers:['Le / la gérant(e)'],
+        law:'Statuts de la SCI',
+        text:'Le mandat est signé par le représentant légal de la société — en général le gérant, désigné dans les statuts et sur l\'extrait Kbis.',
+        tip:'Lisez les statuts avant le rendez-vous. Beaucoup exigent l\'accord préalable de l\'assemblée des associés pour vendre le bien social — le gérant seul ne suffit alors pas.',
+        warn:true
+      }
+    },
+    {
+      id:'tutelle', icon:'shield', label:'Majeur protégé — tutelle', sub:'Représentation totale',
+      result:{
+        signers:['Le tuteur'],
+        law:'Art. 505 C. civ.',
+        text:'Le tuteur signe le mandat au nom de la personne protégée. Mais la vente elle-même doit être autorisée par le juge des contentieux de la protection (ou le conseil de famille) avant d\'être définitive.',
+        tip:'Indiquez le mandat comme donné "sous réserve d\'autorisation judiciaire" et prévenez le tuteur que le calendrier de vente dépendra de cette autorisation.',
+        warn:true
+      }
+    },
+    {
+      id:'curatelle', icon:'shieldSplit', label:'Majeur protégé — curatelle', sub:'Assistance, pas représentation',
+      result:{
+        signers:['La personne protégée','Le curateur'],
+        law:'Art. 467 C. civ.',
+        text:'En curatelle, la personne protégée garde sa capacité mais doit être assistée pour les actes importants. Le mandat de vente porte donc les deux signatures : celle de la personne et celle du curateur.',
+        tip:'Si une seule des deux signatures manque, le mandat n\'est pas valable — vérifiez systématiquement les deux avant de le faire partir.'
+      }
+    }
+  ];
+
+  // ---------- State ----------
+  let state = { situationId:null, answers:{} };
+
+  // ---------- Render: situation grid ----------
+  const grid = document.getElementById('situation-grid');
+  SITUATIONS.forEach(s=>{
+    const btn = document.createElement('button');
+    btn.type='button';
+    btn.className='sit-card';
+    btn.dataset.id=s.id;
+    btn.innerHTML = ICON[s.icon] + `<span class="label">${s.label}</span><span class="sub">${s.sub}</span>`;
+    btn.addEventListener('click', ()=>selectSituation(s.id));
+    grid.appendChild(btn);
+  });
+
+  function selectSituation(id){
+    state.situationId = id;
+    state.answers = {};
+    [...grid.children].forEach(c=>c.classList.toggle('selected', c.dataset.id===id));
+    renderSubQuestions();
+    renderResult();
+  }
+
+  // ---------- Render: sub-questions ----------
+  const subqStep = document.getElementById('subq-step');
+  const subqContainer = document.getElementById('subq-container');
+
+  function renderSubQuestions(){
+    const s = SITUATIONS.find(x=>x.id===state.situationId);
+    subqContainer.innerHTML = '';
+    if(!s || !s.questions){ subqStep.hidden = true; return; }
+    subqStep.hidden = false;
+    s.questions.forEach(q=>{
+      if(q.showIf){
+        const key = Object.keys(q.showIf)[0];
+        if(state.answers[key] !== q.showIf[key]) return;
+      }
+      const box = document.createElement('div');
+      box.className='subq';
+      const qEl = document.createElement('div');
+      qEl.className='q';
+      qEl.textContent = q.q;
+      box.appendChild(qEl);
+      const pills = document.createElement('div');
+      pills.className='pills';
+      q.options.forEach(opt=>{
+        const p = document.createElement('button');
+        p.type='button';
+        p.className='pill';
+        if(state.answers[q.key]===opt.v) p.classList.add('selected');
+        p.textContent = opt.l;
+        p.addEventListener('click', ()=>{
+          state.answers[q.key]=opt.v;
+          renderSubQuestions();
+          renderResult();
+        });
+        pills.appendChild(p);
+      });
+      box.appendChild(pills);
+      subqContainer.appendChild(box);
+    });
+  }
+
+  // ---------- Render: result ----------
+  const resultWrap = document.getElementById('result-wrap');
+
+  function renderResult(){
+    const s = SITUATIONS.find(x=>x.id===state.situationId);
+    if(!s){
+      resultWrap.innerHTML = '<div class="placeholder">Choisir une situation ci-dessus pour voir qui doit signer.</div>';
+      return;
+    }
+    let r;
+    if(s.questions){
+      r = s.resolve(state.answers);
+      if(!r){
+        resultWrap.innerHTML = '<div class="placeholder">Répondez à la question ci-dessus pour obtenir la réponse.</div>';
+        return;
+      }
+    } else {
+      r = s.result;
+    }
+    const signersHtml = r.signers.map(name=>`<span class="signer-chip">${ICON.check}${name}</span>`).join('');
+    resultWrap.innerHTML = `
+      <div class="result">
+        <div class="result-kicker">${s.label}</div>
+        <h2>${(r.multiple || r.signers.length>1) ? 'Signatures multiples requises' : 'Une seule signature suffit'}</h2>
+        <div class="signers">${signersHtml}</div>
+        <div class="block">
+          <div class="label">Pourquoi</div>
+          <p>${r.text} <span class="law-tag">${r.law}</span></p>
+        </div>
+        <div class="callout ${r.warn ? 'warn' : 'tip'}">
+          <span class="callout-label">${r.warn ? 'Vigilance —' : 'Astuce —'}</span>${r.tip}
+        </div>
+        <button type="button" class="reset-btn" id="reset-btn">↺ Nouveau cas</button>
+      </div>
+    `;
+    document.getElementById('reset-btn').addEventListener('click', ()=>{
+      state = { situationId:null, answers:{} };
+      [...grid.children].forEach(c=>c.classList.remove('selected'));
+      subqStep.hidden = true;
+      renderResult();
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  }
+
+  renderResult();
+
+  // ---------- Recap table ----------
+  const recapRows = [
+    ['Propriétaire seul','Le/la propriétaire seul(e)','Titre de propriété'],
+    ['Mariés — bien commun','Les deux époux','Art. 1424 C. civ.'],
+    ['Mariés — bien propre, résidence principale','Les deux époux','Art. 215 al.3 C. civ.'],
+    ['Mariés — bien propre, autre logement','Le conjoint propriétaire','—'],
+    ['Pacsés — bien indivis','Les deux partenaires','Convention de PACS'],
+    ['Pacsés — bien propre','Le partenaire propriétaire','Séparation de biens (défaut)'],
+    ['Union libre — achat à deux','Les deux concubins','Acte de propriété'],
+    ['Union libre — un seul propriétaire','Le/la propriétaire seul(e)','Titre de propriété'],
+    ['Indivision / succession','Tous les indivisaires*','Art. 815-3 C. civ.'],
+    ['SCI','Le/la gérant(e)*','Statuts de la SCI'],
+    ['Tutelle','Le tuteur*','Art. 505 C. civ.'],
+    ['Curatelle','La personne protégée + le curateur','Art. 467 C. civ.'],
+  ];
+  const tbody = document.getElementById('recap-tbody');
+  recapRows.forEach(row=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="situation">${row[0]}</td><td>${row[1]}</td><td><span class="law-tag">${row[2]}</span></td>`;
+    tbody.appendChild(tr);
+  });
+
+  // ---------- Recap download (CSV) ----------
+  function recapToCSV(rows){
+    const header = ['Situation','Qui signe','Base légale'];
+    const esc = v=>{
+      const s = String(v).replace(/"/g,'""');
+      return /[";\n]/.test(s) ? `"${s}"` : s;
+    };
+    const lines = [header, ...rows].map(r=>r.map(esc).join(';'));
+    return '﻿' + lines.join('\r\n');
+  }
+
+  (async function initDownload(){
+    const btn = document.getElementById('download-recap-btn');
+    const status = document.getElementById('dl-status');
+    if(!window.claude || typeof window.claude.use !== 'function') return;
+    let downloads = null;
+    try{ downloads = await window.claude.use('downloads'); }catch(e){ downloads = null; }
+    if(!downloads) return;
+
+    btn.innerHTML = ICON.download + '<span>Télécharger la fiche (CSV)</span>';
+    btn.hidden = false;
+
+    btn.addEventListener('click', async ()=>{
+      btn.disabled = true;
+      status.textContent = '';
+      try{
+        await downloads.save({
+          filename:'fiche-recap-signataires-mandat.csv',
+          data: recapToCSV(recapRows)
+        });
+        status.textContent = 'Fiche téléchargée.';
+      }catch(err){
+        const code = err && err.code;
+        if(code === 'declined'){
+          status.textContent = '';
+        } else if(code === 'rate_limited'){
+          status.textContent = 'Une demande est déjà en cours — réessayez dans un instant.';
+        } else {
+          status.textContent = 'Téléchargement indisponible ici.';
+        }
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  })();
+
+})();
+</script>
